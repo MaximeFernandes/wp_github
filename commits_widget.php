@@ -40,6 +40,54 @@ class Commits_Widget extends WP_Widget
             <?php
         }
     }
+
+    public function form($instance)
+    {
+        $owner = esc_attr($instance['owner']);
+        $repo = esc_attr($instance['repo']);
+        $nbr = esc_attr($instance['nbr']);
+
+        ?>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('owner'); ?>">
+                <?php echo 'Auteur:'; ?>
+                <input class="widefat" id="<?php echo $this->get_field_id('owner'); ?>" name="<?php echo $this->get_field_name('owner'); ?>" type="text" value="<?php echo $owner; ?>" />
+            </label>
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('repo'); ?>">
+                <?php echo 'Dépôt:'; ?>
+                <input class="widefat" id="<?php echo $this->get_field_id('repo'); ?>" name="<?php echo $this->get_field_name('repo'); ?>" type="text" value="<?php echo $repo; ?>" />
+            </label>
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('nbr'); ?>">
+                <?php echo 'Nombre de commits à afficher:'; ?>
+                <input class="widefat" id="<?php echo $this->get_field_id('nbr'); ?>" name="<?php echo $this->get_field_name('nbr'); ?>" type="text" value="<?php echo $nbr; ?>" />
+            </label>
+        </p>
+
+    <?php
+    }
+
+
+    public function widget($args, $instance)
+    {
+        extract($args);
+
+        $owner = $instance['owner'];
+        $repo = $instance['repo'];
+        $nbr = $instance['nbr'];
+
+        echo $before_widget;
+
+        echo $this->getCommits($owner, $repo, $nbr);
+
+        echo $after_widget;
+    }
 }
 
 ?>
