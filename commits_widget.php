@@ -84,6 +84,8 @@ class Commits_Widget extends WP_Widget
 
         echo $before_widget;
 
+        echo $before_title."Commits récent du dépôt ". $repo . $after_title;
+
         echo $this->getCommits($owner, $repo, $nbr);
 
         echo $after_widget;
