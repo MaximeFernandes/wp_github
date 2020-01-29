@@ -6,4 +6,15 @@
  * Author: Maxime Fernandes 
  */
 
+
+class WP_Github
+{
+    public function __construct()
+    {
+        include_once plugin_dir_path( __FILE__ ).'/commits.php';
+        new Commits();
+    }
+}
+
+new WP_Github();
  ?>
