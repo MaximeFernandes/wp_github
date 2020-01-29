@@ -9,38 +9,6 @@ class Commits_Widget extends WP_Widget
         parent::__construct('commits', 'Commits', array('description' => 'Une liste des derniers commits d\'un dépôt.'));
     }
 
-    public function getCommits($owner, $repo, $nbr)
-    {
-        $client = new GitHubClient();
-        $client->setPage();
-        $client->setPageSize($nbr);
-        $commits = $client->repos->commits->listCommitsOnRepository($owner, $repo);
-
-        foreach($commits as $commit)
-        {
-            $committer = $commit->getCommitter()->getLogin();
-            $message = $commit->getCommit()->getMessage();
-            $sha = substr($commit->getSha(), 0, 7);
-            $url = $commit->getUrl();
-
-            ?>
-            <a href="<?php echo $url ?>">
-                <p>
-                    <?php
-                    echo " - Committer: " . $committer;
-                    ?>
-                </p>
-                <p>
-                    <?php
-                    echo $message . " - Sha: " . $sha . "... \n";
-                    ?>
-                <p>
-                <br/>
-            </a>
-            <?php
-        }
-    }
-
     public function form($instance)
     {
         $owner = esc_attr($instance['owner']);
@@ -73,6 +41,37 @@ class Commits_Widget extends WP_Widget
     <?php
     }
 
+    public function getCommits($owner, $repo, $nbr)
+    {
+        $client = new GitHubClient();
+        $client->setPage();
+        $client->setPageSize($nbr);
+        $commits = $client->repos->commits->listCommitsOnRepository($owner, $repo);
+
+        foreach($commits as $commit)
+        {
+            $committer = $commit->getCommitter()->getLogin();
+            $message = $commit->getCommit()->getMessage();
+            $sha = substr($commit->getSha(), 0, 7);
+            $url = $commit->getUrl();
+
+            ?>
+            <a href="<?php echo $url ?>">
+                <p>
+                    <?php
+                    echo " - Committer: " . $committer;
+                    ?>
+                </p>
+                <p>
+                    <?php
+                    echo $message . " - Sha: " . $sha . "... \n";
+                    ?>
+                <p>
+                <br/>
+            </a>
+            <?php
+        }
+    }
 
     public function widget($args, $instance)
     {
@@ -84,10 +83,16 @@ class Commits_Widget extends WP_Widget
 
         echo $before_widget;
 
-        echo $before_title."Commits récent du dépôt ". $repo . $after_title;
+        if (strlen($owner) !== 0 AND strlen($repo) !== 0 AND strlen($nbr) !== 0) {
+            echo $before_title."Commits récent du dépôt ". $repo . $after_title;
+            echo $this->getCommits($owner, $repo, $nbr);
+        }
 
-        echo $this->getCommits($owner, $repo, $nbr);
-
+        else {
+            echo $before_title."Commits".$after_title;
+            echo "Vérifiez que vous ayez bien rempli tous les champs du formulaire ! Il manque une ou plusieurs informations.";
+        }
+       
         echo $after_widget;
     }
 }
