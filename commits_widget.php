@@ -50,24 +50,18 @@ class Commits_Widget extends WP_Widget
 
         foreach($commits as $commit)
         {
-            $committer = $commit->getCommitter()->getLogin();
-            $message = $commit->getCommit()->getMessage();
-            $sha = substr($commit->getSha(), 0, 7);
-            $url = $commit->getUrl();
-
             ?>
-            <a href="<?php echo $url ?>">
+            <a href="<?php echo $commit->getUrl() ?>">
                 <p>
                     <?php
-                    echo " - Committer: " . $committer;
+                    echo " - Committer: " . $commit->getCommitter()->getLogin();
                     ?>
                 </p>
                 <p>
                     <?php
-                    echo $message . " - Sha: " . $sha . "... \n";
+                    echo $commit->getCommit()->getMessage() . " - Sha: " . substr($commit->getSha(), 0, 7) . "...";
                     ?>
-                <p>
-                <br/>
+                </p>
             </a>
             <?php
         }
@@ -84,7 +78,7 @@ class Commits_Widget extends WP_Widget
         echo $before_widget;
 
         if (strlen($owner) !== 0 AND strlen($repo) !== 0 AND strlen($nbr) !== 0) {
-            echo $before_title."Commits récent du dépôt ". $repo . $after_title;
+            echo $before_title."Commits récents du dépôt ". $repo . $after_title;
             echo $this->getCommits($owner, $repo, $nbr);
         }
 
