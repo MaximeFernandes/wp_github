@@ -71,20 +71,16 @@ class Commits_Widget extends WP_Widget
     {
         extract($args);
 
-        $owner = $instance['owner'];
-        $repo = $instance['repo'];
-        $nbr = $instance['nbr'];
-
         echo $before_widget;
 
-        if (strlen($owner) !== 0 AND strlen($repo) !== 0 AND strlen($nbr) !== 0) {
-            echo $before_title."Commits récents du dépôt ". $repo . $after_title;
-            echo $this->getCommits($owner, $repo, $nbr);
+        if ($instance['nbr'] !== null) {          
+            echo $before_title."Commits".$after_title;
+            echo "Vérifiez que vous ayez bien rempli tous les champs du formulaire ! Il manque une ou plusieurs informations.";
         }
 
         else {
-            echo $before_title."Commits".$after_title;
-            echo "Vérifiez que vous ayez bien rempli tous les champs du formulaire ! Il manque une ou plusieurs informations.";
+            echo $before_title."Commits récents du dépôt ". $instance['repo'] . $after_title;
+            echo $this->getCommits($instance['owner'], $instance['repo'], $instance['nbr']);
         }
        
         echo $after_widget;
