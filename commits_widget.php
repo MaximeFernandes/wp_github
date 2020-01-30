@@ -34,7 +34,7 @@ class Commits_Widget extends WP_Widget
         <p>
             <label for="<?php echo $this->get_field_id('nbr'); ?>">
                 <?php echo 'Nombre de commits à afficher:'; ?>
-                <input class="widefat" id="<?php echo $this->get_field_id('nbr'); ?>" name="<?php echo $this->get_field_name('nbr'); ?>" type="text" value="<?php echo $nbr; ?>" />
+                <input class="widefat" id="<?php echo $this->get_field_id('nbr'); ?>" name="<?php echo $this->get_field_name('nbr'); ?>" type="number" value="<?php echo $nbr; ?>" />
             </label>
         </p>
 
@@ -71,16 +71,20 @@ class Commits_Widget extends WP_Widget
     {
         extract($args);
 
+        $owner = $instance['owner'];
+        $repo = $instance['repo'];
+        $nbr = $instance['nbr'];
+
         echo $before_widget;
 
-        if ($instance['nbr'] !== null) {          
+        if ($nbr === "" OR $repo === "" OR $owner === "") {          
             echo $before_title."Commits".$after_title;
             echo "Vérifiez que vous ayez bien rempli tous les champs du formulaire ! Il manque une ou plusieurs informations.";
         }
 
         else {
-            echo $before_title."Commits récents du dépôt ". $instance['repo'] . $after_title;
-            echo $this->getCommits($instance['owner'], $instance['repo'], $instance['nbr']);
+            echo $before_title."Commits récents du dépôt ". $repo . $after_title;
+            echo $this->getCommits($owner, $repo, $nbr);
         }
        
         echo $after_widget;
